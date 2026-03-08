@@ -1,4 +1,8 @@
 .vscode/
 .vscode
+.vs/
 
 ./comands.txt
+
+bin/
+obj/

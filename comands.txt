@@ -1,0 +1,7 @@
+<perplexity>
+- use perplexity and context7 to find out how to perplexity fix/resolve this
+- when using perplexity mcp, you can pass a prompt to the query param with more description about what you want to know, you don't need to pass a query-style search phrase, the same for the topic param of context7
+- for context7 to use the mcp is two steps, one you will find out the library id and them you will check what you want
+</perplexity>
+
+use a ferramenta explorer para entender mais sobre o projeto
