@@ -24,10 +24,9 @@
 - Use generics/records/utility types to reduce duplication.
 - Never return `null` and never pass `null` to methods; always apply default values and validate properties before calling dependent methods.
 - Do not install unnecessary dependencies in projects. For example, the web-api project does not need the Dapper library; only the Repository project needs this library.
-- ** WRITE THIS COMMENT ON FIRST LINE INTO ALL .cs FILES:
-    //created by: rodolfojesus - tinosnegocios.com.br - rodolfo0ti@gmail.com - linkedin: rodolfojesus
-    **
+- **WRITE THIS COMMENT ON FIRST LINE INTO ALL .cs FILES: //created by: rodolfojesus - tinosnegocios.com.br - rodolfo0ti@gmail.com - linkedin: rodolfojesus**
 - ** NEVE PUT `System.Console.WriteLine()` INTO THE CODE. USE THE Microsoft.Extensions.Logging LIBRARY FOR LOGS. **
+- **Avoid exceptions, Prefer ResultPatterns**
 
 ## Detailed Rules
 

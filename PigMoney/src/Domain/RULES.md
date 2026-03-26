@@ -1,6 +1,6 @@
 # Rules
 
-- Only entites(models), enums and aggregates can be create into this cs project
+- Only entites(models), enums, aggregates and abstractions (abstract class and interfaces) can be create into this cs project
 - Use paths for sepate the entities, enums and aggregates
 - All entities(models) will inherit from other abstration class with this properties:
     propertie: ID
