@@ -8,7 +8,7 @@
 
 - The ./programs must have only loaders from this project.
 - DON'T use ./program.cs for create endpoints or business code.
-- Never use models as parameters for endpoints, create DTO for this. DTO are located into `../Application`.
+- Never use models as parameters for endpoints, create DTO for this. DTO must be located into `../Application`.
 - All endpoints must be create into path ./routes 
 - Use the library FluentValidation for validate the request paramenters
 - All responses need follow this pattern:

@@ -156,7 +156,6 @@ The Personal Finance API is a comprehensive backend service designed to help ind
 **Primary Persona: Budget-Conscious Individual**
 - Age: 25-45
 - Needs: Track spending, stick to budget, understand financial habits
-- Technical comfort: Moderate (using through a frontend application)
 - Goals: Reduce unnecessary spending, save for specific goals, avoid debt
 
 ### Main User Flows
@@ -276,12 +275,6 @@ The following features and capabilities are explicitly **excluded** from this PR
 - Data visualization endpoints
 - Predictive analytics
 - Anomaly detection
-
-### Mobile and Frontend
-- Mobile application development
-- Web frontend application
-- Mobile notifications
-- Dashboard UI
 
 ### Code Quality Items Explicitly Excluded
 - Inline code comments (code should be self-documenting)
