@@ -19,10 +19,12 @@ public class ExceptionHandlerMiddleware(RequestDelegate next, ILogger<ExceptionH
 
             logger.LogError(
                 ex,
-                "Unhandled exception occurred. CorrelationId: {CorrelationId}, Path: {Path}, Method: {Method}",
+                "Unhandled exception | CorrelationId: {CorrelationId} | Path: {Path} | Method: {Method} | Message: {Message} | Inner: {Inner}",
                 correlationId,
                 context.Request.Path,
-                context.Request.Method);
+                context.Request.Method,
+                ex.Message,
+                ex.InnerException?.Message);
 
             await HandleExceptionAsync(context, correlationId);
         }

@@ -7,6 +7,7 @@ using Domain.Interfaces;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using Repository.Data;
 using Repository.Repositories;
 
@@ -14,8 +15,20 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty;
-    options.UseNpgsql(connectionString, npgsqlOptions =>
+    var pgBuilder = new NpgsqlConnectionStringBuilder
+    {
+        Host = "localhost",
+        Port = 5432,
+        Database = "tinosnegocios",
+        Username = "postgres",
+        Password = "1q2w3e4r@#$", //send to env file
+        SslMode = SslMode.Disable,
+        Pooling = true,
+        Timeout = 15
+    };
+
+    //string connectionString = builder.Configuration.GetConnectionString(pgBuilder.ConnectionString) ?? string.Empty;
+    options.UseNpgsql(pgBuilder.ConnectionString, npgsqlOptions =>
     {
         npgsqlOptions.EnableRetryOnFailure(3);
         npgsqlOptions.CommandTimeout(30);

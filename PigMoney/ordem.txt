@@ -1,1 +1,6 @@
 run-task -> techspec -> task[1]...
+
+
+==migrations
+dotnet ef migrations add SecondCreate --project Repository --startup-project Api
+dotnet ef database update --project Repository --startup-project Api

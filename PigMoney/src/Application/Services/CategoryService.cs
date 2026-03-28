@@ -57,7 +57,7 @@ public class CategoryService(ICategoryRepository repository, ILogger<CategorySer
             pageSize = 50;
         }
 
-        Result<IEnumerable<Category>> result = await repository.GetAllAsync(page, pageSize);
+        Result<IEnumerable<Category>> result = await repository.GetAllAsync(page, pageSize, (x => x.Id));
 
         if (!result.IsSuccess)
         {

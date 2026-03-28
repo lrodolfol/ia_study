@@ -24,7 +24,7 @@ public static class CategoryRoutes
             return result.IsSuccess ? Results.Ok(result.Value) : Results.NotFound(result.Error);
         });
 
-        group.MapGet("/", async (int page, int pageSize, ICategoryService service) =>
+        group.MapGet("/", async (ICategoryService service, int page = 1, int pageSize = 50) =>
         {
             page = page <= 0 ? 1 : page;
             pageSize = pageSize <= 0 ? 50 : pageSize;

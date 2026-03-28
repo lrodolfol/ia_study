@@ -9,26 +9,19 @@ using Application.DTOs.Incomes;
 using Application.DTOs.Budgets;
 using Domain.Enums;
 
-public class FilterAndPaginationTests : IClassFixture<TestWebApplicationFactory>
+public class FilterAndPaginationTests(TestWebApplicationFactory factory) : IClassFixture<TestWebApplicationFactory>
 {
-    private readonly TestWebApplicationFactory _factory;
-
-    public FilterAndPaginationTests(TestWebApplicationFactory factory)
-    {
-        _factory = factory;
-    }
-
     [Fact]
     public async Task FilterExpenses_ByDateRange_ReturnsCorrectSubset()
     {
-        using var client = _factory.CreateClient();
-        var category = await TestDataSeeder.SeedCategoryAsync(_factory);
-        var account = await TestDataSeeder.SeedAccountAsync(_factory);
+        using var client = factory.CreateClient();
+        var category = await TestDataSeeder.SeedCategoryAsync(factory);
+        var account = await TestDataSeeder.SeedAccountAsync(factory);
 
         var now = DateTime.UtcNow;
-        await TestDataSeeder.SeedExpenseAsync(_factory, category.Id, account.Id, 10m, "Old", now.AddDays(-10));
-        await TestDataSeeder.SeedExpenseAsync(_factory, category.Id, account.Id, 20m, "InRange1", now.AddDays(-5));
-        await TestDataSeeder.SeedExpenseAsync(_factory, category.Id, account.Id, 30m, "InRange2", now.AddDays(-3));
+        await TestDataSeeder.SeedExpenseAsync(factory, category.Id, account.Id, 10m, "Old", now.AddDays(-10));
+        await TestDataSeeder.SeedExpenseAsync(factory, category.Id, account.Id, 20m, "InRange1", now.AddDays(-5));
+        await TestDataSeeder.SeedExpenseAsync(factory, category.Id, account.Id, 30m, "InRange2", now.AddDays(-3));
 
         var startDate = now.AddDays(-6).ToString("yyyy-MM-dd");
         var endDate = now.AddDays(-2).ToString("yyyy-MM-dd");
@@ -40,14 +33,14 @@ public class FilterAndPaginationTests : IClassFixture<TestWebApplicationFactory>
     [Fact]
     public async Task FilterExpenses_ByCategory_ReturnsOnlyMatching()
     {
-        using var client = _factory.CreateClient();
-        var category1 = await TestDataSeeder.SeedCategoryAsync(_factory, "CatA", TransactionType.Expense);
-        var category2 = await TestDataSeeder.SeedCategoryAsync(_factory, "CatB", TransactionType.Expense);
-        var account = await TestDataSeeder.SeedAccountAsync(_factory);
+        using var client = factory.CreateClient();
+        var category1 = await TestDataSeeder.SeedCategoryAsync(factory, "CatA", TransactionType.Expense);
+        var category2 = await TestDataSeeder.SeedCategoryAsync(factory, "CatB", TransactionType.Expense);
+        var account = await TestDataSeeder.SeedAccountAsync(factory);
 
-        await TestDataSeeder.SeedExpenseAsync(_factory, category1.Id, account.Id, 100m, "Cat1-1");
-        await TestDataSeeder.SeedExpenseAsync(_factory, category1.Id, account.Id, 200m, "Cat1-2");
-        await TestDataSeeder.SeedExpenseAsync(_factory, category2.Id, account.Id, 300m, "Cat2-1");
+        await TestDataSeeder.SeedExpenseAsync(factory, category1.Id, account.Id, 100m, "Cat1-1");
+        await TestDataSeeder.SeedExpenseAsync(factory, category1.Id, account.Id, 200m, "Cat1-2");
+        await TestDataSeeder.SeedExpenseAsync(factory, category2.Id, account.Id, 300m, "Cat2-1");
 
         var response = await client.GetAsync($"/api/v1/expenses?categoryId={category1.Id}&page=1&pageSize=50");
 
@@ -61,14 +54,14 @@ public class FilterAndPaginationTests : IClassFixture<TestWebApplicationFactory>
     [Fact]
     public async Task FilterExpenses_ByAccount_ReturnsOnlyMatching()
     {
-        using var client = _factory.CreateClient();
-        var category = await TestDataSeeder.SeedCategoryAsync(_factory);
-        var account1 = await TestDataSeeder.SeedAccountAsync(_factory, "Acc1", AccountType.Checking, 1000m);
-        var account2 = await TestDataSeeder.SeedAccountAsync(_factory, "Acc2", AccountType.Savings, 2000m);
+        using var client = factory.CreateClient();
+        var category = await TestDataSeeder.SeedCategoryAsync(factory);
+        var account1 = await TestDataSeeder.SeedAccountAsync(factory, "Acc1", AccountType.Checking, 1000m);
+        var account2 = await TestDataSeeder.SeedAccountAsync(factory, "Acc2", AccountType.Savings, 2000m);
 
-        await TestDataSeeder.SeedExpenseAsync(_factory, category.Id, account1.Id, 100m, "Acc1-1");
-        await TestDataSeeder.SeedExpenseAsync(_factory, category.Id, account1.Id, 200m, "Acc1-2");
-        await TestDataSeeder.SeedExpenseAsync(_factory, category.Id, account2.Id, 300m, "Acc2-1");
+        await TestDataSeeder.SeedExpenseAsync(factory, category.Id, account1.Id, 100m, "Acc1-1");
+        await TestDataSeeder.SeedExpenseAsync(factory, category.Id, account1.Id, 200m, "Acc1-2");
+        await TestDataSeeder.SeedExpenseAsync(factory, category.Id, account2.Id, 300m, "Acc2-1");
 
         var response = await client.GetAsync($"/api/v1/expenses?accountId={account1.Id}&page=1&pageSize=50");
 
@@ -82,14 +75,14 @@ public class FilterAndPaginationTests : IClassFixture<TestWebApplicationFactory>
     [Fact]
     public async Task FilterIncomes_ByDateRange_ReturnsCorrectSubset()
     {
-        using var client = _factory.CreateClient();
-        var category = await TestDataSeeder.SeedCategoryAsync(_factory, "IncomeCategory", TransactionType.Income);
-        var account = await TestDataSeeder.SeedAccountAsync(_factory);
+        using var client = factory.CreateClient();
+        var category = await TestDataSeeder.SeedCategoryAsync(factory, "IncomeCategory", TransactionType.Income);
+        var account = await TestDataSeeder.SeedAccountAsync(factory);
 
         var now = DateTime.UtcNow;
-        await TestDataSeeder.SeedIncomeAsync(_factory, category.Id, account.Id, 1000m, "OldIncome", now.AddDays(-10));
-        await TestDataSeeder.SeedIncomeAsync(_factory, category.Id, account.Id, 2000m, "InRange1", now.AddDays(-5));
-        await TestDataSeeder.SeedIncomeAsync(_factory, category.Id, account.Id, 3000m, "InRange2", now.AddDays(-3));
+        await TestDataSeeder.SeedIncomeAsync(factory, category.Id, account.Id, 1000m, "OldIncome", now.AddDays(-10));
+        await TestDataSeeder.SeedIncomeAsync(factory, category.Id, account.Id, 2000m, "InRange1", now.AddDays(-5));
+        await TestDataSeeder.SeedIncomeAsync(factory, category.Id, account.Id, 3000m, "InRange2", now.AddDays(-3));
 
         var startDate = now.AddDays(-6).ToString("yyyy-MM-dd");
         var endDate = now.AddDays(-2).ToString("yyyy-MM-dd");
@@ -101,12 +94,12 @@ public class FilterAndPaginationTests : IClassFixture<TestWebApplicationFactory>
     [Fact]
     public async Task FilterBudgets_ByCategory_ReturnsOnlyMatching()
     {
-        using var client = _factory.CreateClient();
-        var category1 = await TestDataSeeder.SeedCategoryAsync(_factory, "BudgetCat1", TransactionType.Expense);
-        var category2 = await TestDataSeeder.SeedCategoryAsync(_factory, "BudgetCat2", TransactionType.Expense);
+        using var client = factory.CreateClient();
+        var category1 = await TestDataSeeder.SeedCategoryAsync(factory, "BudgetCat1", TransactionType.Expense);
+        var category2 = await TestDataSeeder.SeedCategoryAsync(factory, "BudgetCat2", TransactionType.Expense);
 
-        await TestDataSeeder.SeedBudgetAsync(_factory, category1.Id, 500m);
-        await TestDataSeeder.SeedBudgetAsync(_factory, category2.Id, 1000m);
+        await TestDataSeeder.SeedBudgetAsync(factory, category1.Id, 500m);
+        await TestDataSeeder.SeedBudgetAsync(factory, category2.Id, 1000m);
 
         var response = await client.GetAsync($"/api/v1/budgets/by-category/{category1.Id}?page=1&pageSize=50");
 
@@ -120,11 +113,11 @@ public class FilterAndPaginationTests : IClassFixture<TestWebApplicationFactory>
     [Fact]
     public async Task Pagination_Page2_ReturnsCorrectItems()
     {
-        using var client = _factory.CreateClient();
-        var category = await TestDataSeeder.SeedCategoryAsync(_factory, "PagTest", TransactionType.Expense);
-        var account = await TestDataSeeder.SeedAccountAsync(_factory, "PagAcc", AccountType.Cash, 0m);
+        using var client = factory.CreateClient();
+        var category = await TestDataSeeder.SeedCategoryAsync(factory, "PagTest", TransactionType.Expense);
+        var account = await TestDataSeeder.SeedAccountAsync(factory, "PagAcc", AccountType.Cash, 0m);
 
-        await TestDataSeeder.SeedMultipleExpensesAsync(_factory, category.Id, account.Id, 25);
+        await TestDataSeeder.SeedMultipleExpensesAsync(factory, category.Id, account.Id, 25);
 
         var response = await client.GetAsync($"/api/v1/expenses?categoryId={category.Id}&page=2&pageSize=10");
 
@@ -139,7 +132,7 @@ public class FilterAndPaginationTests : IClassFixture<TestWebApplicationFactory>
     [Fact]
     public async Task Pagination_AllEndpoints_ReturnCorrectMetadata()
     {
-        using var client = _factory.CreateClient();
+        using var client = factory.CreateClient();
         
         var categoriesResponse = await client.GetAsync("/api/v1/categories?page=1&pageSize=10");
         Assert.Equal(HttpStatusCode.OK, categoriesResponse.StatusCode);

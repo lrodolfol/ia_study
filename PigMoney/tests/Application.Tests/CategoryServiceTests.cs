@@ -151,7 +151,7 @@ public class CategoryServiceTests
         ];
 
         _repositoryMock
-            .Setup(x => x.GetAllAsync(1, 50))
+            .Setup(x => x.GetAllAsync(1, 50, (x => x.Id)))
             .ReturnsAsync(Result<IEnumerable<Category>>.Success(categories));
 
         _repositoryMock

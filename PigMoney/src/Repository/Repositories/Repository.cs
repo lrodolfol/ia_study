@@ -6,6 +6,7 @@ using Domain.Entities;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Repository.Data;
+using System.Linq.Expressions;
 
 public class Repository<T>(AppDbContext context) : IRepository<T> where T : BaseEntity
 {
@@ -24,7 +25,7 @@ public class Repository<T>(AppDbContext context) : IRepository<T> where T : Base
         return Result<T>.Success(entity);
     }
 
-    public virtual async Task<Result<IEnumerable<T>>> GetAllAsync(int page, int pageSize)
+    public virtual async Task<Result<IEnumerable<T>>> GetAllAsync(int page, int pageSize, Expression<Func<T, object>> orderBy)
     {
         if (page < 1)
         {
@@ -37,6 +38,7 @@ public class Repository<T>(AppDbContext context) : IRepository<T> where T : Base
         }
 
         List<T> entities = await DbSet
+            .OrderBy(orderBy)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
@@ -54,19 +56,12 @@ public class Repository<T>(AppDbContext context) : IRepository<T> where T : Base
         return Result<T>.Success(entity);
     }
 
-    public virtual async Task<Result<T>> UpdateAsync(T entity)
+    public virtual Task<Result<T>> UpdateAsync(T entity)
     {
-        T? existing = await DbSet.FirstOrDefaultAsync(x => x.Id == entity.Id);
-
-        if (existing is null)
-        {
-            return Result<T>.Failure($"{typeof(T).Name} with id {entity.Id} not found");
-        }
-
         entity.UpdatedAt = DateTime.UtcNow;
-        Context.Entry(existing).CurrentValues.SetValues(entity);
+        Context.Entry(entity).State = EntityState.Modified;
 
-        return Result<T>.Success(entity);
+        return Task.FromResult(Result<T>.Success(entity));
     }
 
     public virtual async Task<Result> DeleteAsync(int id)
@@ -80,6 +75,7 @@ public class Repository<T>(AppDbContext context) : IRepository<T> where T : Base
 
         entity.IsDeleted = true;
         entity.UpdatedAt = DateTime.UtcNow;
+        Context.Entry(entity).State = EntityState.Modified;
 
         return Result.Success();
     }

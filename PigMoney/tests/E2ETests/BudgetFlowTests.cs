@@ -7,20 +7,13 @@ using Application.DTOs.Budgets;
 using Application.DTOs.ExpenseItems;
 using Domain.Enums;
 
-public class BudgetFlowTests : IClassFixture<TestWebApplicationFactory>
+public class BudgetFlowTests(TestWebApplicationFactory factory) : IClassFixture<TestWebApplicationFactory>
 {
-    private readonly TestWebApplicationFactory _factory;
-
-    public BudgetFlowTests(TestWebApplicationFactory factory)
-    {
-        _factory = factory;
-    }
-
     [Fact]
     public async Task CreateBudget_StartAndEndDateStoredCorrectly()
     {
-        using var client = _factory.CreateClient();
-        var category = await TestDataSeeder.SeedCategoryAsync(_factory, "BudgetCat", TransactionType.Expense);
+        using var client = factory.CreateClient();
+        var category = await TestDataSeeder.SeedCategoryAsync(factory, "BudgetCat", TransactionType.Expense);
         
         var startDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         var endDate = new DateTime(2024, 1, 31, 0, 0, 0, DateTimeKind.Utc);
@@ -39,10 +32,10 @@ public class BudgetFlowTests : IClassFixture<TestWebApplicationFactory>
     [Fact]
     public async Task CreateExpenseWithMultipleItems_AllItemsCreatedSuccessfully()
     {
-        using var client = _factory.CreateClient();
-        var category = await TestDataSeeder.SeedCategoryAsync(_factory);
-        var account = await TestDataSeeder.SeedAccountAsync(_factory);
-        var expense = await TestDataSeeder.SeedExpenseAsync(_factory, category.Id, account.Id, 100m);
+        using var client = factory.CreateClient();
+        var category = await TestDataSeeder.SeedCategoryAsync(factory);
+        var account = await TestDataSeeder.SeedAccountAsync(factory);
+        var expense = await TestDataSeeder.SeedExpenseAsync(factory, category.Id, account.Id, 100m);
 
         var item1 = new CreateExpenseItemRequest(expense.Id, 30m, "Item 1", null);
         var item2 = new CreateExpenseItemRequest(expense.Id, 25m, "Item 2", null);
@@ -60,12 +53,12 @@ public class BudgetFlowTests : IClassFixture<TestWebApplicationFactory>
     [Fact]
     public async Task CreateExpenseItem_SumExceedsParent_ReturnsBadRequest()
     {
-        using var client = _factory.CreateClient();
-        var category = await TestDataSeeder.SeedCategoryAsync(_factory);
-        var account = await TestDataSeeder.SeedAccountAsync(_factory);
-        var expense = await TestDataSeeder.SeedExpenseAsync(_factory, category.Id, account.Id, 100m);
+        using var client = factory.CreateClient();
+        var category = await TestDataSeeder.SeedCategoryAsync(factory);
+        var account = await TestDataSeeder.SeedAccountAsync(factory);
+        var expense = await TestDataSeeder.SeedExpenseAsync(factory, category.Id, account.Id, 100m);
         
-        await TestDataSeeder.SeedExpenseItemAsync(_factory, expense.Id, 80m, "First item");
+        await TestDataSeeder.SeedExpenseItemAsync(factory, expense.Id, 80m, "First item");
 
         var request = new CreateExpenseItemRequest(expense.Id, 50m, "Exceeds limit", null);
         var response = await client.PostAsJsonAsync("/api/v1/expense-items", request);
@@ -76,9 +69,9 @@ public class BudgetFlowTests : IClassFixture<TestWebApplicationFactory>
     [Fact]
     public async Task UpdateBudget_ChangesArePersisted()
     {
-        using var client = _factory.CreateClient();
-        var category = await TestDataSeeder.SeedCategoryAsync(_factory);
-        var budget = await TestDataSeeder.SeedBudgetAsync(_factory, category.Id, 500m);
+        using var client = factory.CreateClient();
+        var category = await TestDataSeeder.SeedCategoryAsync(factory);
+        var budget = await TestDataSeeder.SeedBudgetAsync(factory, category.Id, 500m);
 
         var updateRequest = new UpdateBudgetRequest(null, 750m, null, null);
         var response = await client.PutAsJsonAsync($"/api/v1/budgets/{budget.Id}", updateRequest);

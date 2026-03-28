@@ -59,7 +59,7 @@ public class AccountService(IAccountRepository repository, ILogger<AccountServic
             pageSize = 50;
         }
 
-        Result<IEnumerable<Account>> result = await repository.GetAllAsync(page, pageSize);
+        Result<IEnumerable<Account>> result = await repository.GetAllAsync(page, pageSize, (x => x.Id));
 
         if (!result.IsSuccess)
         {

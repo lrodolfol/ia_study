@@ -71,7 +71,7 @@ public class RepositoryTests
         }
         await context.SaveChangesAsync();
 
-        var result = await repository.GetAllAsync(1, 5);
+        var result = await repository.GetAllAsync(1, 5, (x => x.Id));
 
         Assert.True(result.IsSuccess);
         Assert.Equal(5, result.Value!.Count());
@@ -87,7 +87,7 @@ public class RepositoryTests
         await context.Categories.AddAsync(new Category { Name = "Deleted Category", IsDeleted = true });
         await context.SaveChangesAsync();
 
-        var result = await repository.GetAllAsync(1, 50);
+        var result = await repository.GetAllAsync(1, 50, (x => x.Id));
 
         Assert.True(result.IsSuccess);
         Assert.Single(result.Value!);

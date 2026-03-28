@@ -73,7 +73,7 @@ public class BudgetService(
             pageSize = 50;
         }
 
-        Result<IEnumerable<Budget>> result = await budgetRepository.GetAllAsync(page, pageSize);
+        Result<IEnumerable<Budget>> result = await budgetRepository.GetAllAsync(page, pageSize, (x => x.Id));
 
         if (!result.IsSuccess)
         {

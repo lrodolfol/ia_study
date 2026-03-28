@@ -4,6 +4,7 @@ namespace Application.Services;
 using Application.DTOs.Categories;
 using Application.DTOs.Common;
 using Domain.Common;
+using System.Linq.Expressions;
 
 public interface ICategoryService
 {
