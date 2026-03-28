@@ -2,7 +2,7 @@
 
 ## Tasks
 
-- [ ] 1.0 Foundation - Domain Layer & Base Infrastructure
+- [x] 1.0 Foundation - Domain Layer & Base Infrastructure
 - [ ] 2.0 Repository Layer & Database Setup
 - [ ] 3.0 Application Layer - DTOs & Validation
 - [ ] 4.0 Category & Account Services
