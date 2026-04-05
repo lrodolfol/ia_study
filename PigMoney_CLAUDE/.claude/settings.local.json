@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(cd \"C:/Users/rodolfo.jesus/Documents/ia/PigMoney_CLAUDE\" && dotnet add src/Repository/Repository.csproj package Microsoft.EntityFrameworkCore --version 10.0.0-preview.2.25163.2 2>&1 || dotnet add src/Repository/Repository.csproj package Microsoft.EntityFrameworkCore 2>&1)",
+      "Bash(cd \"C:/Users/rodolfo.jesus/Documents/ia/PigMoney_CLAUDE\" && dotnet add src/Repository/Repository.csproj package Npgsql.EntityFrameworkCore.PostgreSQL 2>&1)",
+      "Bash(cd \"C:/Users/rodolfo.jesus/Documents/ia/PigMoney_CLAUDE\" && dotnet add src/Application/Application.csproj package FluentValidation.DependencyInjectionExtensions 2>&1)",
+      "Bash(cd \"C:/Users/rodolfo.jesus/Documents/ia/PigMoney_CLAUDE\" && dotnet add src/API/API.csproj package Swashbuckle.AspNetCore 2>&1)",
+      "Bash(cd \"C:/Users/rodolfo.jesus/Documents/ia/PigMoney_CLAUDE\" && dotnet remove src/Repository/Repository.csproj package Microsoft.EntityFrameworkCore && dotnet add src/Repository/Repository.csproj package Microsoft.EntityFrameworkCore --version 10.0.4 2>&1)",
+      "Bash(cd \"C:/Users/rodolfo.jesus/Documents/ia/PigMoney_CLAUDE/src/Application\" && dotnet add reference ../Domain/Domain.csproj 2>&1)",
+      "Bash(cd \"C:/Users/rodolfo.jesus/Documents/ia/PigMoney_CLAUDE/src/Repository\" && dotnet add reference ../Domain/Domain.csproj 2>&1)",
+      "Bash(cd \"C:/Users/rodolfo.jesus/Documents/ia/PigMoney_CLAUDE/src/API\" && dotnet add reference ../Application/Application.csproj ../Repository/Repository.csproj 2>&1)",
+      "Bash(cd \"C:/Users/rodolfo.jesus/Documents/ia/PigMoney_CLAUDE\" && dotnet build pigMoney.slnx --no-incremental 2>&1)",
+      "Bash(cd \"C:/Users/rodolfo.jesus/Documents/ia/PigMoney_CLAUDE/tests/Domain.Tests\" && dotnet add reference ../../src/Domain/Domain.csproj 2>&1)",
+      "Bash(cd \"C:/Users/rodolfo.jesus/Documents/ia/PigMoney_CLAUDE\" && dotnet test pigMoney.slnx 2>&1)",
+      "Bash(dotnet build 2>&1 | tail -50)",
+      "Bash(dotnet test 2>&1 | tail -50)",
+      "Bash(dotnet build:*)",
+      "Bash(dotnet test:*)"
+    ]
+  }
+}

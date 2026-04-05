@@ -1,0 +1,17 @@
+CRIAR PRD:
+/create-prd.md   /prompt.md
+
+CRIAR TECHSPEC:
+/create-techspec.md      /prd-criado
+
+CRIAR TASKS:
+/create-tasks        /prd-criado            /techspec-criado
+
+EXECUTAR TASKS:
+/executar-tasks       @task-criada(1 de cada vez. limpar contexto depois de terminado)      /prd-criado         /techspec-criado
+
+
+
+- remover implamentações da task1
+- criar projeto de teste
+- adicionar os projetos dentro da solução
