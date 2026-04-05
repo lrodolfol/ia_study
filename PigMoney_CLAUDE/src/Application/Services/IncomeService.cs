@@ -16,8 +16,8 @@ public class IncomeService(IIncomeRepository incomeRepository, IAccountRepositor
 
     public async Task<Result<PaginatedList<IncomeResponse>>> GetAllAsync(IncomeFilterParams filters, int page, int pageSize)
     {
-        var incomes = await _incomeRepository.GetFilteredAsync(filters.StartDate, filters.EndDate, filters.AccountId, page, pageSize);
-        int totalCount = await _incomeRepository.CountFilteredAsync(filters.StartDate, filters.EndDate, filters.AccountId);
+        var incomes = await _incomeRepository.GetFilteredAsync(filters, page, pageSize);
+        int totalCount = await _incomeRepository.CountFilteredAsync(filters);
 
         var items = incomes.Select(MapToResponse);
 

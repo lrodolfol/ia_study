@@ -135,4 +135,24 @@ public class AccountServiceTests
         Assert.Empty(result.Value!.Items);
         Assert.Equal(0, result.Value.TotalCount);
     }
+
+    [Fact]
+    public async Task GetAllAsync_WithData_ShouldReturnPaginatedList()
+    {
+        var accounts = new List<Account>
+        {
+            new() { Id = 1, Name = "Checking", Type = AccountType.Checking, Balance = 1000m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+            new() { Id = 2, Name = "Savings", Type = AccountType.Savings, Balance = 5000m, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow }
+        };
+        _repositoryMock.Setup(r => r.GetPagedAsync(1, 10)).ReturnsAsync(accounts);
+        _repositoryMock.Setup(r => r.CountAsync()).ReturnsAsync(2);
+
+        var result = await _service.GetAllAsync(1, 10);
+
+        Assert.True(result.IsSuccess);
+        Assert.Equal(2, result.Value!.Items.Count());
+        Assert.Equal(2, result.Value.TotalCount);
+        Assert.Equal(1, result.Value.Page);
+        Assert.Equal(10, result.Value.PageSize);
+    }
 }

@@ -9,6 +9,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Category> Categories => Set<Category>();
     public DbSet<Account> Accounts => Set<Account>();
     public DbSet<Income> Incomes => Set<Income>();
+    public DbSet<Expense> Expenses => Set<Expense>();
+    public DbSet<ExpenseItem> ExpenseItems => Set<ExpenseItem>();
+    public DbSet<Budget> Budgets => Set<Budget>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

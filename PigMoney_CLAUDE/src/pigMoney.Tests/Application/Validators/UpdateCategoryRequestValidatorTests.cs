@@ -24,6 +24,13 @@ public class UpdateCategoryRequestValidatorTests
     }
 
     [Fact]
+    public void ShouldHaveError_WhenDescriptionExceedsMaxLength()
+    {
+        var result = _validator.TestValidate(new UpdateCategoryRequest("Valid", new string('A', 501)));
+        result.ShouldHaveValidationErrorFor(x => x.Description);
+    }
+
+    [Fact]
     public void ShouldNotHaveError_WhenRequestIsValid()
     {
         var result = _validator.TestValidate(new UpdateCategoryRequest("Updated", "New desc"));

@@ -1,6 +1,7 @@
 //created by: rodolfojesus - tinosnegocios.com.br - rodolfo0ti@gmail.com - linkedin: rodolfojesus
 using Application.DTOs.Incomes;
 using Application.Services;
+using Domain.Common;
 using Domain.Entities;
 using Domain.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -74,6 +75,19 @@ public class IncomeServiceTests
     }
 
     [Fact]
+    public async Task UpdateAsync_WhenAccountNotFound_ShouldReturnFailure()
+    {
+        var income = new Income { Id = 1, Amount = 1000m, Date = DateTime.UtcNow, Description = "Test", AccountId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow };
+        _incomeRepositoryMock.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(income);
+        _accountRepositoryMock.Setup(r => r.ExistsAsync(99)).ReturnsAsync(false);
+
+        var result = await _service.UpdateAsync(1, new UpdateIncomeRequest(2000m, DateTime.UtcNow, "Updated", 99));
+
+        Assert.False(result.IsSuccess);
+        Assert.Equal("Account not found.", result.Error);
+    }
+
+    [Fact]
     public async Task DeleteAsync_WhenFound_ShouldReturnSuccess()
     {
         var income = new Income { Id = 1, Amount = 1000m, Date = DateTime.UtcNow, Description = "Test", AccountId = 1 };
@@ -124,9 +138,9 @@ public class IncomeServiceTests
     public async Task GetAllAsync_WithFilters_ShouldReturnFilteredResults()
     {
         var filters = new IncomeFilterParams(DateTime.UtcNow.AddDays(-30), DateTime.UtcNow, 1);
-        _incomeRepositoryMock.Setup(r => r.GetFilteredAsync(filters.StartDate, filters.EndDate, filters.AccountId, 1, 10))
+        _incomeRepositoryMock.Setup(r => r.GetFilteredAsync(It.IsAny<Domain.Common.IncomeFilterParams>(), 1, 10))
             .ReturnsAsync([]);
-        _incomeRepositoryMock.Setup(r => r.CountFilteredAsync(filters.StartDate, filters.EndDate, filters.AccountId))
+        _incomeRepositoryMock.Setup(r => r.CountFilteredAsync(It.IsAny<Domain.Common.IncomeFilterParams>()))
             .ReturnsAsync(0);
 
         var result = await _service.GetAllAsync(filters, 1, 10);
@@ -144,9 +158,9 @@ public class IncomeServiceTests
         {
             new() { Id = 1, Amount = 100m, Date = DateTime.UtcNow, Description = "Income 1", AccountId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow }
         };
-        _incomeRepositoryMock.Setup(r => r.GetFilteredAsync(null, null, null, 1, 10))
+        _incomeRepositoryMock.Setup(r => r.GetFilteredAsync(It.IsAny<Domain.Common.IncomeFilterParams>(), 1, 10))
             .ReturnsAsync(incomes);
-        _incomeRepositoryMock.Setup(r => r.CountFilteredAsync(null, null, null))
+        _incomeRepositoryMock.Setup(r => r.CountFilteredAsync(It.IsAny<Domain.Common.IncomeFilterParams>()))
             .ReturnsAsync(1);
 
         var result = await _service.GetAllAsync(filters, 1, 10);

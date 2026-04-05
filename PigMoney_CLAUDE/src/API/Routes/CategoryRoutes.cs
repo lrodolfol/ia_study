@@ -23,7 +23,7 @@ public class CategoryRoutes(ICategoryService categoryService) : ControllerBase
     {
         var result = await _categoryService.GetByIdAsync(id);
         if (!result.IsSuccess)
-            return NotFound(new { statusCode = 404, message = result.Error, error = Array.Empty<string>() });
+            return NotFound(result.Error);
 
         return Ok(result.Value);
     }
@@ -33,7 +33,7 @@ public class CategoryRoutes(ICategoryService categoryService) : ControllerBase
     {
         var result = await _categoryService.CreateAsync(request);
         if (!result.IsSuccess)
-            return BadRequest(new { statusCode = 400, message = result.Error, error = Array.Empty<string>() });
+            return BadRequest(result.Error);
 
         return CreatedAtAction("GetById", new { id = result.Value!.Id }, result.Value);
     }
@@ -43,7 +43,7 @@ public class CategoryRoutes(ICategoryService categoryService) : ControllerBase
     {
         var result = await _categoryService.UpdateAsync(id, request);
         if (!result.IsSuccess)
-            return NotFound(new { statusCode = 404, message = result.Error, error = Array.Empty<string>() });
+            return NotFound(result.Error);
 
         return Ok(result.Value);
     }
@@ -55,9 +55,9 @@ public class CategoryRoutes(ICategoryService categoryService) : ControllerBase
         if (!result.IsSuccess)
         {
             if (result.Error.Contains("not found", StringComparison.OrdinalIgnoreCase))
-                return NotFound(new { statusCode = 404, message = result.Error, error = Array.Empty<string>() });
+                return NotFound(result.Error);
 
-            return Conflict(new { statusCode = 409, message = result.Error, error = Array.Empty<string>() });
+            return Conflict(result.Error);
         }
 
         return NoContent();

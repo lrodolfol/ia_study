@@ -7,7 +7,7 @@ namespace Application.Services;
 
 public interface IIncomeService
 {
-    Task<Result<PaginatedList<IncomeResponse>>> GetAllAsync(IncomeFilterParams filters, int page, int pageSize);
+    Task<Result<PaginatedList<IncomeResponse>>> GetAllAsync(Domain.Common.IncomeFilterParams filters, int page, int pageSize);
     Task<Result<IncomeResponse>> GetByIdAsync(int id);
     Task<Result<IncomeResponse>> CreateAsync(CreateIncomeRequest request);
     Task<Result<IncomeResponse>> UpdateAsync(int id, UpdateIncomeRequest request);

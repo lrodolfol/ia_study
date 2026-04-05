@@ -39,6 +39,13 @@ public class CreateAccountRequestValidatorTests
     }
 
     [Fact]
+    public void ShouldHaveError_WhenBalanceIsMinimalNegative()
+    {
+        var result = _validator.TestValidate(new CreateAccountRequest("Account", AccountType.Checking, -0.01m));
+        result.ShouldHaveValidationErrorFor(x => x.Balance);
+    }
+
+    [Fact]
     public void ShouldNotHaveError_WhenBalanceIsZero()
     {
         var result = _validator.TestValidate(new CreateAccountRequest("Account", AccountType.Cash, 0));

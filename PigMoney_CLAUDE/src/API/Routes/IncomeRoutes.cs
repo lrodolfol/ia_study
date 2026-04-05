@@ -1,6 +1,7 @@
 //created by: rodolfojesus - tinosnegocios.com.br - rodolfo0ti@gmail.com - linkedin: rodolfojesus
 using Application.DTOs.Incomes;
 using Application.Services;
+using Domain.Common;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Routes;
@@ -21,6 +22,9 @@ public class IncomeRoutes(IIncomeService incomeService) : ControllerBase
     {
         var filters = new IncomeFilterParams(startDate, endDate, accountId);
         var result = await _incomeService.GetAllAsync(filters, page, pageSize);
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
         return Ok(result.Value);
     }
 
@@ -29,7 +33,7 @@ public class IncomeRoutes(IIncomeService incomeService) : ControllerBase
     {
         var result = await _incomeService.GetByIdAsync(id);
         if (!result.IsSuccess)
-            return NotFound(new { statusCode = 404, message = result.Error, error = Array.Empty<string>() });
+            return NotFound(result.Error);
 
         return Ok(result.Value);
     }
@@ -39,7 +43,7 @@ public class IncomeRoutes(IIncomeService incomeService) : ControllerBase
     {
         var result = await _incomeService.CreateAsync(request);
         if (!result.IsSuccess)
-            return BadRequest(new { statusCode = 400, message = result.Error, error = Array.Empty<string>() });
+            return BadRequest(result.Error);
 
         return CreatedAtAction("GetById", new { id = result.Value!.Id }, result.Value);
     }
@@ -49,7 +53,7 @@ public class IncomeRoutes(IIncomeService incomeService) : ControllerBase
     {
         var result = await _incomeService.UpdateAsync(id, request);
         if (!result.IsSuccess)
-            return NotFound(new { statusCode = 404, message = result.Error, error = Array.Empty<string>() });
+            return NotFound(result.Error);
 
         return Ok(result.Value);
     }
@@ -59,7 +63,7 @@ public class IncomeRoutes(IIncomeService incomeService) : ControllerBase
     {
         var result = await _incomeService.DeleteAsync(id);
         if (!result.IsSuccess)
-            return NotFound(new { statusCode = 404, message = result.Error, error = Array.Empty<string>() });
+            return NotFound(result.Error);
 
         return NoContent();
     }

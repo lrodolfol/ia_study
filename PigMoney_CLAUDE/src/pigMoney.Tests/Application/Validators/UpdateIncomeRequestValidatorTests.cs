@@ -38,6 +38,13 @@ public class UpdateIncomeRequestValidatorTests
     }
 
     [Fact]
+    public void ShouldNotHaveError_WhenAmountIsMinimumValid()
+    {
+        var result = _validator.TestValidate(new UpdateIncomeRequest(0.01m, DateTime.UtcNow, "Small income", 1));
+        result.ShouldNotHaveAnyValidationErrors();
+    }
+
+    [Fact]
     public void ShouldNotHaveError_WhenRequestIsValid()
     {
         var result = _validator.TestValidate(new UpdateIncomeRequest(2000m, DateTime.UtcNow, "Updated salary", 1));

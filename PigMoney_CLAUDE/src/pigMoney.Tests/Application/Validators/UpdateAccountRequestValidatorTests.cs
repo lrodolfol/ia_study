@@ -25,6 +25,20 @@ public class UpdateAccountRequestValidatorTests
     }
 
     [Fact]
+    public void ShouldHaveError_WhenBalanceIsMinimalNegative()
+    {
+        var result = _validator.TestValidate(new UpdateAccountRequest("Account", AccountType.Checking, -0.01m));
+        result.ShouldHaveValidationErrorFor(x => x.Balance);
+    }
+
+    [Fact]
+    public void ShouldHaveError_WhenNameExceedsMaxLength()
+    {
+        var result = _validator.TestValidate(new UpdateAccountRequest(new string('A', 101), AccountType.Checking, 100));
+        result.ShouldHaveValidationErrorFor(x => x.Name);
+    }
+
+    [Fact]
     public void ShouldHaveError_WhenAccountTypeIsInvalid()
     {
         var result = _validator.TestValidate(new UpdateAccountRequest("Account", (AccountType)99, 100));
